@@ -22,21 +22,31 @@ export function Faq() {
     const el = root.current;
     if (!el) return;
     const ctx = gsap.context(() => {
-      gsap.from("[data-faq-card]", {
-        y: 35,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-faq-list]", start: "top 85%" },
-      });
-      gsap.from("[data-aeo-summary]", {
-        x: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-aeo-summary]", start: "top 85%" },
-      });
+      gsap.fromTo(
+        "[data-faq-card]",
+        { y: 28, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.06,
+          duration: 0.6,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-faq-list]", start: "top 85%" },
+        }
+      );
+      gsap.fromTo(
+        "[data-aeo-summary]",
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-aeo-summary]", start: "top 85%" },
+        }
+      );
     }, el);
     return () => ctx.revert();
   }, [filter]);
@@ -45,7 +55,7 @@ export function Faq() {
     <section
       ref={root}
       id="faq"
-      className="relative py-28 sm:py-36"
+      className="relative py-24 sm:py-36 overflow-hidden"
       style={{ background: "#f7f2ea" }}
       aria-label="Frequently Asked Questions and Knowledge Base"
     >

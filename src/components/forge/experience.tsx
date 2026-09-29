@@ -31,6 +31,7 @@ export default function Experience() {
     /* kill browser scroll restoration — reloading mid-page must boot at
        the top or the preloader + ScrollTriggers initialize desynced */
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    ScrollTrigger.clearScrollMemory?.();
     window.scrollTo(0, 0);
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -38,7 +39,7 @@ export default function Experience() {
       lerp: reduced ? 1 : 0.09,
       smoothWheel: !reduced,
       wheelMultiplier: 1,
-      touchMultiplier: 1.4,
+      touchMultiplier: 1.0,
     });
     lenisRef.current = lenis;
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
@@ -92,7 +93,7 @@ export default function Experience() {
     <>
       <Preloader onDone={handleDone} />
       <Nav visible={loaded} />
-      <main>
+      <main className="relative w-full overflow-x-clip">
         <Hero />
         <Manifesto />
         <Problem />

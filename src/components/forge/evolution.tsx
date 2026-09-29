@@ -26,7 +26,7 @@ export function Evolution() {
   const [active, setActive] = useState(0);
 
   const gateCount = EVOLUTION_STAGES.length;
-  const labelRadius = R + 40;
+  const labelRadius = R + 34;
 
   // Direct mathematical sync of rotor, arc, spark, and labels
   const updateDial = (p: number) => {
@@ -184,8 +184,8 @@ export function Evolution() {
 
         <div className="mt-16 grid items-center gap-14 lg:grid-cols-[1fr_1fr]">
           {/* ── the precision instrument dial ── */}
-          <div className="relative mx-auto aspect-square w-full max-w-[30rem]">
-            <svg viewBox="-50 -50 420 420" className="h-full w-full overflow-visible">
+          <div className="relative mx-auto aspect-square w-full max-w-[22rem] sm:max-w-[26rem] lg:max-w-[30rem]">
+            <svg viewBox="-60 -60 440 440" className="h-full w-full overflow-visible">
               <defs>
                 <filter id="evoGlow" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
@@ -279,7 +279,7 @@ export function Evolution() {
                         <circle
                           cx={nx}
                           cy={ny}
-                          r="22"
+                          r="18"
                           fill="none"
                           stroke="#c8102e"
                           strokeWidth="1.5"
@@ -287,13 +287,13 @@ export function Evolution() {
                         >
                           <animate
                             attributeName="r"
-                            values="15;26;15"
+                            values="12;20;12"
                             dur="2s"
                             repeatCount="indefinite"
                           />
                           <animate
                             attributeName="opacity"
-                            values="0.7;0.1;0.7"
+                            values="0.6;0.1;0.6"
                             dur="2s"
                             repeatCount="indefinite"
                           />
@@ -343,7 +343,7 @@ export function Evolution() {
                       data-evo-label
                       className="font-mono transition-colors duration-300 select-none"
                       style={{
-                        fontSize: isActive ? "12px" : "10.5px",
+                        fontSize: isActive ? "12px" : "10px",
                         letterSpacing: "0.14em",
                         fontWeight: isActive ? 800 : 600,
                         fill: isActive ? "#c8102e" : "#7a6f61",
@@ -362,7 +362,7 @@ export function Evolution() {
                 key={active}
                 className="font-display font-black tabular-nums leading-none"
                 style={{
-                  fontSize: "5.5rem",
+                  fontSize: "clamp(3.6rem, 10vw, 5.2rem)",
                   color: "#191410",
                   animation: "readout-flip 0.45s cubic-bezier(0.2,0.7,0.2,1) both",
                 }}

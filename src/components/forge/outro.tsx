@@ -47,22 +47,38 @@ export function Outro() {
         ease: "power3.out",
         scrollTrigger: { trigger: "[data-cta-title]", start: "top 80%" },
       });
-      gsap.from("[data-step]", {
-        x: -70,
-        opacity: 0,
-        stagger: 0.12,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-steps]", start: "top 80%" },
-      });
-      gsap.from("[data-cta-actions] > *", {
-        y: 30,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: { trigger: "[data-cta-actions]", start: "top 88%" },
-      });
+      const isMobile = window.innerWidth < 768;
+      gsap.fromTo(
+        "[data-step]",
+        {
+          x: isMobile ? 0 : -50,
+          y: isMobile ? 24 : 0,
+          opacity: 0,
+        },
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 0.65,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-steps]", start: "top 80%" },
+        }
+      );
+      gsap.fromTo(
+        "[data-cta-actions] > *",
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.55,
+          ease: "power2.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-cta-actions]", start: "top 88%" },
+        }
+      );
 
       /* giant wordmark fills from the bottom as you scroll to the end */
       gsap.fromTo(
@@ -92,7 +108,7 @@ export function Outro() {
   }, []);
 
   return (
-    <section ref={root} className="relative" style={{ background: "#f7f2ea" }}>
+    <section ref={root} className="relative overflow-hidden" style={{ background: "#f7f2ea" }}>
       {/* ══ quickstart CTA ══ */}
       <div className="dotgrid py-28 sm:py-36">
         <div className="mx-auto grid w-full max-w-7xl gap-14 px-5 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -246,17 +262,17 @@ export function Outro() {
         </div>
 
         {/* giant wordmark */}
-        <div className="relative select-none" aria-hidden>
+        <div className="relative select-none overflow-hidden" aria-hidden>
           <div
             className="font-display text-center font-black leading-[0.78] tracking-tight text-outline"
-            style={{ fontSize: "clamp(3rem, 13.4vw, 15rem)", whiteSpace: "nowrap" }}
+            style={{ fontSize: "clamp(2.2rem, 12.2vw, 15rem)", whiteSpace: "nowrap" }}
           >
             SKILLFORGE
           </div>
           <div
             data-wordmark-fill
             className="font-display absolute inset-0 text-center font-black leading-[0.78] tracking-tight"
-            style={{ fontSize: "clamp(3rem, 13.4vw, 15rem)", whiteSpace: "nowrap", color: "#c8102e" }}
+            style={{ fontSize: "clamp(2.2rem, 12.2vw, 15rem)", whiteSpace: "nowrap", color: "#c8102e" }}
           >
             SKILLFORGE
           </div>

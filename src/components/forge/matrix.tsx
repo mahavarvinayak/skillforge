@@ -128,9 +128,8 @@ export function Matrix() {
             return (
               <article
                 key={d.index}
-                className="card-line relative flex w-[80vw] shrink-0 flex-col p-6 sm:w-[26rem] sm:p-7 lg:w-[28rem]"
+                className="card-line relative flex w-[82vw] shrink-0 flex-col p-5 sm:w-[26rem] sm:p-7 lg:w-[28rem] even:mt-4 sm:even:mt-11"
                 style={{
-                  marginTop: i % 2 === 0 ? "0rem" : "2.75rem",
                   transform: `rotate(${i % 2 === 0 ? -0.7 : 0.7}deg) scale(${isActive ? 1.025 : 1})`,
                   opacity: isActive ? 1 : 0.72,
                   filter: isActive ? "none" : "saturate(0.85)",

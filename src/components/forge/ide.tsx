@@ -83,7 +83,7 @@ export function Ide() {
   }, []);
 
   return (
-    <section ref={root} className="relative py-28 sm:py-36" style={{ background: "#f7f2ea" }}>
+    <section ref={root} className="relative py-24 sm:py-36 overflow-hidden" style={{ background: "#f7f2ea" }}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHead
@@ -155,7 +155,7 @@ export function Ide() {
           <div className="p-5 font-mono text-[0.78rem] leading-loose sm:p-6 sm:text-[0.85rem]">
             <div className="flex flex-wrap items-start">
               <span style={{ color: "#c8102e" }}>$&nbsp;</span>
-              <span style={{ color: "#f7f2ea" }}>{CMD.slice(0, chars)}</span>
+              <span className="break-all" style={{ color: "#f7f2ea" }}>{CMD.slice(0, chars)}</span>
               <span className="caret" style={chars < CMD.length ? undefined : { animationDuration: "1.6s" }} />
             </div>
             {OUT.slice(0, outN).map((line) => (

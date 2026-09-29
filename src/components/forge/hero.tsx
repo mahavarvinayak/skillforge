@@ -46,10 +46,8 @@ export function Hero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        /* intro: animates on mount, then unconditionally clears all transforms
-           on completion so elements return to pure CSS baseline and can never
-           pollute or collide with the scroll-pinned timeline below */
+      /* ── DESKTOP (lg+): pinned cinematic scroll choreography ── */
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
         const introTl = gsap.timeline({
           defaults: { ease: "power3.out" },
           onComplete: () => {
@@ -77,14 +75,10 @@ export function Hero() {
           .from("[data-chip]", { scale: 0.6, opacity: 0, duration: 0.7, stagger: 0.08, ease: "back.out(1.8)" }, 1.0)
           .from("[data-hero-cue]", { opacity: 0, duration: 0.8 }, 1.4);
 
-        // If the page boots while scrolled, skip intro immediately
         if (window.scrollY > 20) {
           introTl.progress(1);
         }
 
-        /* idle float on the chip's INNER wrapper — the outer element stays
-           owned by the scroll parallax below, so the two tweens never fight
-           over the same `y` (that clash used to break the hero on scroll-up) */
         gsap.utils.toArray<HTMLElement>("[data-chip-float]").forEach((float, i) => {
           gsap.to(float, {
             y: "+=12",
@@ -96,7 +90,6 @@ export function Hero() {
           });
         });
 
-        /* helper to force pristine rest state whenever scroll is at top */
         const resetHeroAtRest = () => {
           if (!el || !document.contains(el)) return;
           const chars = el.querySelectorAll<HTMLElement>("[data-hero-title] [data-char]");
@@ -115,16 +108,12 @@ export function Hero() {
           });
         };
 
-        /* ── scroll choreography — ONE pinned timeline drives every exit
-           animation. NEVER use invalidateOnRefresh here: start values are
-           constant rest coordinates (0, 0, 1) and must NEVER be corrupted
-           by a refresh while scrolled! ── */
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: el,
             start: "top top",
-            end: "+=170%",
+            end: "+=130%",
             pin: true,
             scrub: true,
             onUpdate: (self) => {
@@ -145,27 +134,24 @@ export function Hero() {
         });
         core.setScroll(tl.scrollTrigger ? tl.scrollTrigger.progress : 0);
 
-        /* title chars lift & tilt off-screen, staggered like falling type */
         tl.fromTo(
           "[data-hero-title] [data-char]",
           { yPercent: 0, rotate: 0 },
           {
-            yPercent: -160,
-            rotate: (i: number) => (i % 2 === 0 ? -8 : 7),
-            duration: 1.16,
-            stagger: { each: 0.06, from: "start" },
+            yPercent: -130,
+            rotate: (i: number) => (i % 2 === 0 ? -6 : 5),
+            duration: 1.1,
+            stagger: { each: 0.035, from: "start" },
             immediateRender: false,
           },
           0
         );
-        /* sub-copy & badges drift away, done by ~70% of the pin */
         tl.fromTo(
           "[data-hero-sub], [data-hero-badge]",
           { y: 0, opacity: 1 },
-          { y: -70, opacity: 0, duration: 1.2, immediateRender: false },
+          { y: -60, opacity: 0, duration: 1.0, immediateRender: false },
           0
         );
-        /* chips parallax out at depth-dependent speeds & angles */
         tl.fromTo(
           "[data-chip]",
           {
@@ -174,29 +160,68 @@ export function Hero() {
           },
           {
             y: (i, tgt) =>
-              (i % 2 === 0 ? -260 : -160) * Number(tgt.dataset.depth || 0.5),
+              (i % 2 === 0 ? -220 : -140) * Number(tgt.dataset.depth || 0.5),
             rotation: (i, tgt) =>
               Number(tgt.dataset.rot || 0) +
-              (i % 2 === 0 ? 12 : -12) * Number(tgt.dataset.depth || 0.5),
-            duration: 1.7,
+              (i % 2 === 0 ? 10 : -10) * Number(tgt.dataset.depth || 0.5),
+            duration: 1.4,
             immediateRender: false,
           },
           0
         );
-        /* scroll cue fades early */
         tl.fromTo(
           "[data-hero-cue]",
           { opacity: 1 },
-          { opacity: 0, duration: 0.4, immediateRender: false },
+          { opacity: 0, duration: 0.35, immediateRender: false },
           0
         );
-        /* π watermark — slow counter-drift */
         tl.fromTo(
           "[data-hero-pi]",
           { y: 0, rotate: 0 },
-          { y: -140, rotate: 6, duration: 1.7, immediateRender: false },
+          { y: -120, rotate: 4, duration: 1.4, immediateRender: false },
           0
         );
+      });
+
+      /* ── MOBILE & TABLET (<1024px): smooth unpinned entrance and natural scroll ── */
+      mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
+        const introTl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          onComplete: () => {
+            const chars = el.querySelectorAll<HTMLElement>("[data-hero-title] [data-char]");
+            if (chars.length) gsap.set(chars, { clearProps: "transform" });
+            const subAndBadge = el.querySelectorAll<HTMLElement>("[data-hero-sub], [data-hero-badge]");
+            if (subAndBadge.length) gsap.set(subAndBadge, { clearProps: "transform,opacity" });
+            const cue = el.querySelector<HTMLElement>("[data-hero-cue]");
+            if (cue) gsap.set(cue, { clearProps: "transform,opacity" });
+            const eyebrow = el.querySelector<HTMLElement>("[data-hero-eyebrow]");
+            if (eyebrow) gsap.set(eyebrow, { clearProps: "transform,opacity" });
+          },
+        });
+        introTl
+          .from("[data-hero-eyebrow]", { y: 20, opacity: 0, duration: 0.6 }, 0.05)
+          .from(
+            "[data-hero-title] [data-char]",
+            { yPercent: 90, rotate: 2, duration: 0.9, stagger: 0.03, ease: "power4.out" },
+            0.15
+          )
+          .from("[data-hero-sub]", { y: 24, opacity: 0, duration: 0.7 }, 0.5)
+          .from("[data-hero-badge]", { y: 16, opacity: 0, duration: 0.5, stagger: 0.06 }, 0.65)
+          .from("[data-hero-cue]", { opacity: 0, duration: 0.6 }, 0.9);
+
+        if (window.scrollY > 20) {
+          introTl.progress(1);
+        }
+
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          onUpdate: (self) => {
+            core.setScroll(self.progress);
+          },
+        });
       });
     }, el);
 
@@ -230,16 +255,16 @@ export function Hero() {
         aria-hidden
       />
 
-      {/* π watermark — The Π Lab signature (replaces the old lattice) */}
+      {/* π watermark — The Π Lab signature */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-[4%] top-1/2 z-0 hidden -translate-y-1/2 select-none md:block"
+        className="pointer-events-none absolute -right-[2%] top-1/2 z-0 hidden -translate-y-1/2 select-none xl:block"
       >
         <div
           data-hero-pi
           className="font-display font-black italic leading-none will-change-transform"
           style={{
-            fontSize: "clamp(20rem, 38vw, 34rem)",
+            fontSize: "clamp(20rem, 34vw, 32rem)",
             color: "transparent",
             WebkitTextStroke: "2px rgba(200,16,46,0.12)",
           }}
@@ -255,7 +280,7 @@ export function Hero() {
           data-chip
           data-depth={c.depth}
           data-rot={c.rot}
-          className="chip absolute hidden md:inline-flex will-change-transform"
+          className="chip absolute hidden lg:inline-flex will-change-transform"
           style={{ left: c.left, top: c.top, transform: `rotate(${c.rot}deg)` }}
         >
           <span data-chip-float className="inline-flex items-center gap-[0.35em]">
@@ -275,7 +300,7 @@ export function Hero() {
         <h1
           data-hero-title
           className="font-display font-black leading-[0.9] tracking-tight"
-          style={{ fontSize: "clamp(3.4rem, 11.5vw, 10.5rem)" }}
+          style={{ fontSize: "clamp(2.6rem, 11vw, 10.5rem)" }}
         >
           <SplitChars text="SKILL" className="text-ink" />
           <SplitChars text="FORGE" className="italic text-ember" charClass="!text-ember" />

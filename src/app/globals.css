@@ -136,11 +136,14 @@
   }
   html {
     scroll-behavior: auto;
+    max-width: 100%;
+    overflow-x: clip;
   }
   body {
     @apply bg-paper text-ink antialiased;
     font-family: var(--font-space), system-ui, sans-serif;
-    overflow-x: hidden;
+    max-width: 100%;
+    overflow-x: clip;
   }
   ::selection {
     background: #c8102e;

@@ -24,54 +24,91 @@ export function Safety() {
     const el = root.current;
     if (!el) return;
     const ctx = gsap.context(() => {
-      gsap.from("[data-safe-col=always]", {
-        x: -90,
-        opacity: 0,
-        rotate: -2,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-safe-grid]", start: "top 78%" },
-      });
-      gsap.from("[data-safe-col=never]", {
-        x: 90,
-        opacity: 0,
-        rotate: 2,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-safe-grid]", start: "top 78%" },
-      });
+      const isMobile = window.innerWidth < 768;
+      gsap.fromTo(
+        "[data-safe-col=always]",
+        {
+          x: isMobile ? 0 : -70,
+          y: isMobile ? 30 : 0,
+          opacity: 0,
+          rotate: isMobile ? 0 : -2,
+        },
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-safe-grid]", start: "top 78%" },
+        }
+      );
+      gsap.fromTo(
+        "[data-safe-col=never]",
+        {
+          x: isMobile ? 0 : 70,
+          y: isMobile ? 30 : 0,
+          opacity: 0,
+          rotate: isMobile ? 0 : 2,
+        },
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-safe-grid]", start: "top 78%" },
+        }
+      );
 
-      /* the stamp SLAMS in */
-      gsap.from("[data-safe-stamp]", {
-        scale: 3.2,
-        opacity: 0,
-        rotation: 24,
-        duration: 0.55,
-        ease: "power4.in",
-        scrollTrigger: { trigger: "[data-safe-stamp]", start: "top 80%" },
-      });
+      /* the stamp SLAMS in safely without inflating viewport */
+      gsap.fromTo(
+        "[data-safe-stamp]",
+        {
+          scale: isMobile ? 1.6 : 2.2,
+          opacity: 0,
+          rotation: isMobile ? 6 : 18,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          rotation: -8,
+          duration: 0.55,
+          ease: "power4.in",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-safe-stamp]", start: "top 80%" },
+        }
+      );
       /* ring shock after slam */
       gsap.fromTo(
         "[data-safe-shock]",
-        { scale: 0.4, opacity: 0.7 },
+        { scale: 0.6, opacity: 0.7 },
         {
-          scale: 1.6,
+          scale: 1.4,
           opacity: 0,
-          duration: 0.7,
-          delay: 0.5,
+          duration: 0.6,
+          delay: 0.45,
           ease: "power2.out",
           scrollTrigger: { trigger: "[data-safe-stamp]", start: "top 80%" },
         }
       );
 
-      gsap.from("[data-stat]", {
-        y: 50,
-        opacity: 0,
-        stagger: 0.09,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-stats]", start: "top 82%", onEnter: () => setStatsOn(true) },
-      });
+      gsap.fromTo(
+        "[data-stat]",
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.65,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-stats]", start: "top 82%", onEnter: () => setStatsOn(true) },
+        }
+      );
     }, el);
     return () => ctx.revert();
   }, []);
@@ -163,13 +200,15 @@ export function Safety() {
       </div>
 
       {/* ── stats band ── */}
-      <div data-stats className="py-20" style={{ background: "#c8102e" }}>
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-x-6 gap-y-12 px-5 sm:px-10 md:grid-cols-5 md:gap-x-0">
-          {STATS.map((s) => (
+      <div data-stats className="py-16 sm:py-20" style={{ background: "#c8102e" }}>
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-5 sm:px-10 sm:grid-cols-3 md:grid-cols-5 md:gap-x-0">
+          {STATS.map((s, i) => (
             <div
               key={s.label}
               data-stat
-              className="flex flex-col items-center gap-3 text-center md:border-l md:border-white/15 md:px-2 md:first:border-l-0"
+              className={`flex flex-col items-center gap-3 text-center md:border-l md:border-white/15 md:px-2 md:first:border-l-0 ${
+                i === 4 ? "col-span-2 sm:col-span-1 md:col-span-1" : ""
+              }`}
             >
               <Counter to={s.value} suffix={s.suffix} on={statsOn} />
               <span
@@ -204,7 +243,7 @@ function Counter({ to, suffix, on }: { to: number; suffix: string; on: boolean }
   return (
     <span
       className="font-display font-black tabular-nums leading-none"
-      style={{ fontSize: "clamp(3rem, 6vw, 4.6rem)", color: "#ffffff" }}
+      style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.4rem)", color: "#ffffff" }}
     >
       {v}
       <span style={{ color: "#f2dfe2" }}>{suffix}</span>

@@ -102,10 +102,10 @@ export function Manifesto() {
   return (
     <section ref={root} className="relative">
       {/* ══ crossing ticker strips ══ */}
-      <div className="relative overflow-hidden py-16 sm:py-20" aria-hidden>
+      <div className="relative overflow-hidden py-14 sm:py-20 w-full" aria-hidden>
         <div
           data-ticker-strip
-          className="w-[110vw] -ml-[5vw] border-y py-4 will-change-transform sm:py-5"
+          className="w-[120%] -ml-[10%] border-y py-4 will-change-transform sm:py-5"
           style={{
             background: "#191410",
             transform: "rotate(-2deg)",
@@ -126,7 +126,7 @@ export function Manifesto() {
         </div>
         <div
           data-ticker-strip
-          className="w-[110vw] -ml-[5vw] -mt-8 border-y py-4 will-change-transform sm:py-5"
+          className="w-[120%] -ml-[10%] -mt-8 border-y py-4 will-change-transform sm:py-5"
           style={{
             background: "#c8102e",
             transform: "rotate(1.4deg)",

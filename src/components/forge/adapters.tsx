@@ -37,36 +37,55 @@ export function Adapters() {
         ease: "power2.inOut",
         scrollTrigger: { trigger: "[data-adp-lines]", start: "top 60%" },
       });
-      gsap.from("[data-adp-card]", {
-        y: 70,
-        opacity: 0,
-        rotate: (i) => [-2, 1.5, -1][i % 3],
-        duration: 0.85,
-        stagger: 0.14,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-adp-cards]", start: "top 78%" },
-      });
-      gsap.from("[data-adp-cap]", {
-        y: 18,
-        opacity: 0,
-        stagger: 0.045,
-        duration: 0.4,
-        ease: "power2.out",
-        scrollTrigger: { trigger: "[data-adp-caps]", start: "top 85%" },
-      });
-      gsap.from("[data-adp-fallback]", {
-        x: -60,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-adp-fallback]", start: "top 85%" },
-      });
+      gsap.fromTo(
+        "[data-adp-card]",
+        {
+          y: 50,
+          opacity: 0,
+          rotate: (i) => [-2, 1.5, -1][i % 3],
+        },
+        {
+          y: 0,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-adp-cards]", start: "top 78%" },
+        }
+      );
+      gsap.fromTo(
+        "[data-adp-cap]",
+        { y: 16, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.035,
+          duration: 0.35,
+          ease: "power2.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-adp-caps]", start: "top 85%" },
+        }
+      );
+      gsap.fromTo(
+        "[data-adp-fallback]",
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: "[data-adp-fallback]", start: "top 88%" },
+        }
+      );
     }, el);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={root} className="relative py-28 sm:py-36" style={{ background: "#efe8dd" }}>
+    <section ref={root} className="relative py-24 sm:py-36 overflow-hidden" style={{ background: "#efe8dd" }}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <SectionHead
           eyebrow="06 / The Adapter Boundary"

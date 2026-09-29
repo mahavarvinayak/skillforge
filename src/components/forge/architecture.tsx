@@ -54,15 +54,21 @@ export function Architecture() {
       });
 
       /* below lg: the stack is taller than the viewport, so pinning would
-         clip it. Each piece instead rises as IT enters the viewport. */
+         clip it. Each piece instead rises vertically as IT enters the viewport (no horizontal offsets that leak). */
       mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
-        steps.forEach(([sel, vars]) => {
-          gsap.from(sel, {
-            ...vars,
-            duration: 0.9,
-            ease: "power2.out",
-            scrollTrigger: { trigger: sel, start: "top 88%", once: true },
-          });
+        steps.forEach(([sel]) => {
+          gsap.fromTo(
+            sel,
+            { y: 32, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.75,
+              ease: "power2.out",
+              clearProps: "transform",
+              scrollTrigger: { trigger: sel, start: "top 90%", once: true },
+            }
+          );
         });
       });
     }, el);

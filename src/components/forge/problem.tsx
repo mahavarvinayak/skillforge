@@ -41,27 +41,36 @@ export function Problem() {
     const el = root.current;
     if (!el) return;
     const ctx = gsap.context(() => {
-      /* phones get proportionally shorter flight paths */
-      const shrink = () => (window.innerWidth < 640 ? 0.45 : 1);
+      /* phones get 0 horizontal offset to avoid overflow; desktop gets proportional flight paths */
+      const getX = (px: number) => (window.innerWidth < 768 ? 0 : window.innerWidth < 1024 ? px * 0.35 : px);
 
       gsap.utils.toArray<HTMLElement>("[data-pcard]").forEach((card, i) => {
         const p = PROBLEMS[i % PROBLEMS.length].from;
-        /* entrance owns x / rotation / opacity … */
-        gsap.from(card, {
-          x: () => p.x * shrink(),
-          rotation: p.r,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 88%", once: true },
-        });
-        /* … while the scroll scrub owns y only — no shared props, so the
-           tweens can never fight when the user scrolls back up */
+        /* entrance uses explicit fromTo so values are never corrupted on scroll-up or refresh */
+        gsap.fromTo(
+          card,
+          {
+            x: getX(p.x),
+            rotation: window.innerWidth < 768 ? 0 : p.r,
+            opacity: 0,
+          },
+          {
+            x: 0,
+            rotation: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: "power3.out",
+            immediateRender: false,
+            clearProps: "transform",
+            scrollTrigger: { trigger: card, start: "top 88%", once: true },
+          }
+        );
+        /* … while the scroll scrub owns y only */
         gsap.fromTo(
           card,
           { y: 0 },
           {
-            y: (i + 1) % 2 === 0 ? -46 : 42,
+            y: (i + 1) % 2 === 0 ? -36 : 32,
             ease: "none",
             scrollTrigger: {
               trigger: el,
@@ -74,19 +83,23 @@ export function Problem() {
         );
       });
 
-      gsap.from("[data-problem-note]", {
-        scaleX: 0,
-        transformOrigin: "left",
-        duration: 1.1,
-        ease: "power3.inOut",
-        scrollTrigger: { trigger: "[data-problem-note]", start: "top 90%" },
-      });
+      gsap.fromTo(
+        "[data-problem-note]",
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          transformOrigin: "left",
+          duration: 1.0,
+          ease: "power3.inOut",
+          scrollTrigger: { trigger: "[data-problem-note]", start: "top 90%" },
+        }
+      );
     }, el);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={root} className="relative bg-cream py-28 sm:py-36">
+    <section ref={root} className="relative bg-cream py-24 sm:py-36 overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHead
