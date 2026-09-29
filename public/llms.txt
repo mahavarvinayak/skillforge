@@ -1,0 +1,43 @@
+# PI SkillForge
+> The Modular Intelligence & Reasoning Layer for LinkedIn Workflows by The PI Lab.
+
+PI SkillForge is an open-source framework providing 40 contract-governed reasoning skills across 10 operational domains for LinkedIn workflows. It decouples reasoning logic from physical API execution through a swappable adapter boundary, enforcing Draft 2020-12 JSON schema validation and 6-gate governed self-evolution. Zero runtime dependencies. MIT licensed.
+
+## Key Facts & Technical Specs
+- Total Skills: 40 production reasoning modules
+- Domains: 10 operational domains (Foundation, Content Engine, Prospecting, Outreach, Strategy, Automation, Data & CRM, Analytics & Intel, Talent & Career, Paid Campaigns)
+- Schema Standard: Draft 2020-12 JSON Schema
+- Runtime Dependencies: 0 (Pure Python standard library)
+- Supported IDEs / Runtimes: Claude Code, Cursor, Windsurf, VS Code, Cline, Roo Code, Zed, JetBrains, Neovim, and generic agent environments
+- Maintainer: The PI Lab (Vinayak Mahavar)
+- Repository: https://github.com/the-pi-lab/linkedin-skillforge
+- Website: https://thepilab.in
+
+## Core Domains & Skills
+1. Foundation: profile-optimization, personal-branding, linkedin-seo
+2. Content Engine: content-creation, copywriting, ai-content-generation, algorithm-optimization, content-scheduling
+3. Prospecting: lead-generation, sales-navigator, prospect-research, b2b-prospecting, lead-qualification
+4. Outreach: outreach-automation, cold-messaging, connection-strategy, social-selling, ai-personalization, appointment-setting, email-outreach-integration, networking
+5. Strategy: sales-funnel, abm, growth-strategy, engagement-strategy
+6. Automation: ai-agent-development, workflow-automation, automation-compliance
+7. Data & CRM: crm-integration, data-enrichment
+8. Analytics & Intel: analytics-reporting, competitor-analysis, market-research, conversion-tracking
+9. Talent & Career: recruitment-automation, job-search-optimization, employer-branding
+10. Paid Campaigns: ads-management, campaign-optimization, api-integration
+
+## Governed Self-Evolution (6 Gates)
+1. OBSERVE: Log production execution outcomes, confidence, and reviewer notes.
+2. SCORE: Benchmark live IQ and measured behavior.
+3. PROPOSE: Generate bounded diffs (never wild mutation).
+4. VALIDATE: Enforce Draft 2020-12 schema validation, semver, and safety linting.
+5. RELEASE: Require explicit human maintainer signoff.
+6. MONITOR: Post-release regression and drift tracking.
+
+## Enterprise Safety Principles
+- Always: Human-in-the-loop interlocks on critical actions, audit trail first with provenance, strict volume caps, analysis-only fallback mode.
+- Never (Hard Rejected): Session hijacking, cookie theft, DOM tampering scripts, CAPTCHA bypass, mass spamming, or rate-limit evasion.
+
+## Quickstart CLI
+- Clone: git clone https://github.com/the-pi-lab/linkedin-skillforge.git
+- Test: python -m unittest discover -s tests
+- Install Skill: python ide/install.py install --skill <skill-name> --ide auto --apply

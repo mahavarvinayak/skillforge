@@ -1,0 +1,16 @@
+{
+  "name": "PI SkillForge",
+  "short_name": "SkillForge",
+  "description": "The Modular Intelligence Layer for LinkedIn Workflows",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f2ea",
+  "theme_color": "#c8102e",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
